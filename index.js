@@ -9,16 +9,22 @@ function getDogBreeds() {
   }
 
   function displayResults() {
-    fetch('https://dog.ceo/api/breed/' + $('.breed').val() + '/images/random')
-      .then(response => response.json())
-      .then(responseJson => 
-        $('.results').append('<img src="' + responseJson.message + '" class = "results-img">'))
-      .catch(error => alert('Something went wrong. Try again later.'));
-      $('.results').removeClass('hidden');
-        
+    let searchTerm = $('.breed').val()
+    $('.results').removeClass('hidden');  
+    fetch('https://dog.ceo/api/breed/' + searchTerm.toLowerCase() + '/images/random')
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error(response.statusText);
+    })
+    .then(responseJson =>
+      $('.results').append('<img src="' + responseJson.message + '" class = "results-img">'))
+    .catch(error => 
+        $('.error').text(`Something went wrong: ${error.message}`))
   }
 
-function watchForm() {
+function watchForm(breedsList) {
   $('form').submit(event => {
     event.preventDefault();
     $('.results').empty();
@@ -26,10 +32,6 @@ function watchForm() {
 })}
 function populateBreedsList(responseJson) {
   let breedsList = responseJson.message
-  for (let breed in breedsList) {
-    $('.breed').append('<option value="' + breed + '">' + breed +'</option>')
-    console.log(breed)
-  }
+  watchForm(breedsList)
 }
-watchForm();
 getDogBreeds();
