@@ -20,12 +20,13 @@ function getDogBreeds() {
     })
     .then(responseJson =>
       $('.results').append('<img src="' + responseJson.message + '" class = "results-img">'))
-    .catch(error => 
-        $('.error').text(`Something went wrong: ${error.message}`))
+    .catch(err => 
+        $('.error').text(`Something went wrong: ${err.message}`))
   }
 
 function watchForm(breedsList) {
   $('form').submit(event => {
+    $('.error').text('')
     event.preventDefault();
     $('.results').empty();
     displayResults();
