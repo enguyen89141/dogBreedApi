@@ -16,7 +16,7 @@ function getDogBreeds() {
         if (response.ok) {
             return response.json();
         }
-        throw new Error(response.statusText);
+        throw new Error(`${searchTerm} not found. Please try again.`);
     })
     .then(responseJson =>
       $('.results').append('<img src="' + responseJson.message + '" class = "results-img">'))
